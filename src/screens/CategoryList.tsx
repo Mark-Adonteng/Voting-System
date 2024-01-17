@@ -1,40 +1,43 @@
+// CategoryList.tsx
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addCategory, updateCategory, deleteCategory } from '../redux/Action'; // Update the path accordingly
+import { RootState } from '../redux/Store'; // Update the path accordingly
 import { FaTrash } from 'react-icons/fa';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const CategoryList = () => {
   const [category, setCategory] = useState('');
-  const [categories, setCategories] = useState(['President', 'Vice President', 'Financial Secretary']);
-  const [editIndex, setEditIndex] = useState(null);
-
-
-  
+  const [editIndex, setEditIndex] = useState<number | null>(null);
+  const categories = useSelector((state: RootState) => state.categories);
+  const dispatch = useDispatch();
 
   const handleSave = () => {
     if (category.trim() !== '') {
+      const uppercaseCategory = category.toUpperCase(); // Convert to uppercase
       if (editIndex !== null) {
-        // If in edit mode, update the category at the specified index
-        const updatedCategories = [...categories];
-        updatedCategories[editIndex] = category;
-        setCategories(updatedCategories);
-        setEditIndex(null); // Exit edit mode
+        dispatch(updateCategory(editIndex, uppercaseCategory));
+        setEditIndex(null);
       } else {
-        // If not in edit mode, add a new category
-        setCategories([...categories, category]);
+        dispatch(addCategory(uppercaseCategory));
       }
-      setCategory('');
+      setCategory(''); // Clear the input field
     }
   };
 
   const handleDelete = (index: number) => {
-    const updatedCategories = [...categories];
-    updatedCategories.splice(index, 1);
-    setCategories(updatedCategories);
+    dispatch(deleteCategory(index));
   };
 
   const handleEdit = (index: number) => {
-    // Enter edit mode for the specified index
     setEditIndex(index);
     setCategory(categories[index]);
+  };
+
+  const handleCategoryClick = (index: number) => {
+    // Handle the click event here, for example, open a new page or perform navigation
+    console.log(`Category ${categories[index]} clicked!`);
+    // You can replace the console.log with code to open a new page or perform navigation.
   };
 
   return (
@@ -77,7 +80,7 @@ const CategoryList = () => {
             <tr className=' '>
               <th className='border px-4 py-2'></th>
               <th className='border px-4 py-2 '>#</th>
-              <th className='border px-4 font-serif '>Category</th>
+              <th className='border px-4 py-2 font-serif '>Category</th>
               <th className='border px-4 py-2'></th>
               <th className='border px-4 py-2'></th>
             </tr>
@@ -96,7 +99,12 @@ const CategoryList = () => {
                       className='border rounded-md px-2 py-1 focus:outline-none focus:border-blue-500'
                     />
                   ) : (
-                    cat
+                    <Link
+                      to={`/category/${cat}`} // Replace "/category" with the actual route you want to use for individual categories
+                      className='cursor-pointer text-black hover:text-blue-800'
+                    >
+                      {cat}
+                    </Link>
                   )}
                 </td>
                 <td className='border px-4 py-2'>
@@ -110,9 +118,9 @@ const CategoryList = () => {
                 <td className='border px-4 py-2'>
                   <button
                     onClick={() => handleDelete(index)}
-                    className= ' text-red-600 hover:text-red-800 focus:outline-none mx-1'
+                    className='text-red-600 hover:text-red-800 focus:outline-none mx-1'
                   >
-                   <FaTrash />
+                    <FaTrash />
                   </button>
                 </td>
               </tr>

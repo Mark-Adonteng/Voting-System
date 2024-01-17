@@ -1,41 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { FaTrash } from 'react-icons/fa'; // Import the trash icon
+// VotingList.tsx
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem, updateItem, deleteItem } from '../redux/Action';
+import { FaTrash } from 'react-icons/fa';
 
-interface VotingItem {
+export interface VotingItem {
   title: string;
   description: string;
 }
 
+export interface RootState {
+  votingList: VotingItem[];
+}
+
 const VotingList = () => {
+  const dispatch = useDispatch();
+  const votingList: VotingItem[] = useSelector((state: RootState) => state.votingList);
+
+  
+
+
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [votingList, setVotingList] = useState<VotingItem[]>([]);
-
-  useEffect(() => {
-    // Adding default items when the component mounts
-    setVotingList([
-      { title: 'SRC ELECTION', description: 'SRC' },
-      { title: 'WASSA ELECTION', description: 'WASSA' },
-      { title: 'GNUT ELECTION', description: 'GNUT' },
-      { title: 'COMPSA ELECTION', description: 'COMPSA' },
-    ]);
-  }, []);
 
   const handleSave = () => {
     if (editingIndex !== null) {
-      // Editing an existing item
-      const updatedList = [...votingList];
-      updatedList[editingIndex] = { title: title.toUpperCase(), description: description.toUpperCase() };
-      setVotingList(updatedList);
+      dispatch(updateItem(editingIndex, { title: title.toUpperCase(), description: description.toUpperCase() }));
       setEditingIndex(null);
     } else {
-      // Creating a new item
-      const newItem: VotingItem = { title: title.toUpperCase(), description: description.toUpperCase() };
-      setVotingList([...votingList, newItem]);
+      dispatch(addItem({ title: title.toUpperCase(), description: description.toUpperCase() }));
     }
 
-    // Clear the input fields
     setTitle('');
     setDescription('');
   };
@@ -48,8 +44,7 @@ const VotingList = () => {
   };
 
   const handleDelete = (index: number) => {
-    const updatedList = votingList.filter((item, i) => i !== index);
-    setVotingList(updatedList);
+    dispatch(deleteItem(index));
   };
 
   return (
@@ -108,7 +103,7 @@ const VotingList = () => {
                 </tr>
               </thead>
               <tbody>
-                {votingList.map((item, index) => (
+              {votingList && votingList.map((item, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{item.title}</td>

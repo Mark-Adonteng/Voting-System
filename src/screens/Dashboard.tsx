@@ -1,13 +1,10 @@
-// Dashboard.jsx
 import React from 'react';
-import ElectionCardItems from '../models/ElectionCardItems';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/Store';
+import ElectionCardItems from '../models/ElectionCardItems'; // Update the path accordingly
 
 const Dashboard = () => {
-  // Define a click handler function
-  const handleCardClick = (title: string) => {
-    console.log(`Clicked on ${title}`);
-    // Add your desired logic for when a card is clicked
-  };
+  const categories = useSelector((state: RootState) => state.categories);
 
   return (
     <div>
@@ -16,33 +13,14 @@ const Dashboard = () => {
       </div>
 
       <div className='grid grid-cols-4 gap-4 mt-8'>
-        {/* Card 1 */}
-        <ElectionCardItems
-          title='SRC ELECTIONS'
-          imageUrl='/src/assets/OIP (4).jpg'
-          onClick={() => handleCardClick('SRC ELECTIONS')}
-        />
-
-        {/* Card 2 */}
-        <ElectionCardItems
-          title='GNUTS ELECTIONS'
-          imageUrl='/src/assets/OIP (4).jpg'
-          onClick={() => handleCardClick('GNUTS ELECTIONS')}
-        />
-
-        {/* Card 3 */}
-        <ElectionCardItems
-          title='COMPSA ELECTIONS'
-          imageUrl='/src/assets/OIP (4).jpg'
-          onClick={() => handleCardClick('COMPSA ELECTIONS')}
-        />
-
-        {/* Card 4 */}
-        <ElectionCardItems
-          title='WASSA Elections'
-          imageUrl='/src/assets/OIP (4).jpg'
-          onClick={() => handleCardClick('WASSA ELECTIONS')}
-        />
+        {categories.map((category, index) => (
+          <ElectionCardItems
+            key={index}
+            title={category}
+            imageUrl={`/src/assets/OIP (4).jpg`} // You may need to update this path accordingly
+            onClick={() => handleCardClick(category)} // Assuming you have a handleCardClick function
+          />
+        ))}
       </div>
     </div>
   );
