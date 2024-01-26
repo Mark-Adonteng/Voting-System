@@ -1,3 +1,5 @@
+// NewCandidateButton.tsx
+
 import React, { useState } from 'react';
 import { useFormData } from '../context/FormDataContext';
 
@@ -13,7 +15,6 @@ const NewCandidateButton = () => {
 
   const handleCancelClick = () => {
     setShowForm(false);
-    // Reset form fields when cancel is clicked
     setSelectedCategory('');
     setCandidateNames(['', '', '']);
   };
@@ -27,9 +28,7 @@ const NewCandidateButton = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Check if the selectedCategory is empty or the default prompt value
     if (!selectedCategory || selectedCategory === 'Select a Category') {
-      // Prompt the user to select a category
       alert('Please select a category.');
       return;
     }
@@ -39,7 +38,6 @@ const NewCandidateButton = () => {
       { selectedCategory, candidateNames },
     ]);
 
-    // Reset form fields after submit
     setSelectedCategory('');
     setCandidateNames(['', '', '']);
     setShowForm(false);
@@ -65,7 +63,6 @@ const NewCandidateButton = () => {
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
-                {/* Adding a default prompt value */}
                 <option value="" disabled hidden>
                   Select a Category
                 </option>

@@ -22,7 +22,7 @@ export const deleteCategory = (index: number) => ({
 
 
 // votingListActions.ts
-import { VotingItem } from '../screens/VotingList'; // Make sure to import the VotingItem type
+import { VotingItem } from '../screens/Faq'; // Make sure to import the VotingItem type
 
 export const addItem = (newItem: VotingItem) => ({
   type: 'ADD_ITEM',

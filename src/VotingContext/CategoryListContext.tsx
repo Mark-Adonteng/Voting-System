@@ -7,10 +7,7 @@ interface CategoryState {
 
 interface CategoryAction {
   type: string;
-  payload: {
-    newCategory?: string; // Add the appropriate type for newCategory
-    index?: number; // Add the appropriate type for index
-  };
+  payload: any;
 }
 
 const initialState: CategoryState = {

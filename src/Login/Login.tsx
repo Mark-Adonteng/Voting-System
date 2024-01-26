@@ -1,12 +1,38 @@
-
 // Login.tsx
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import users, { User } from '../helpers/api/users';
 
 interface LoginProps {
-  onLogin: () => void;
+  onLogin: (role: string) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleLoginClick = () => {
+    const usernameInput = document.getElementById('login') as HTMLInputElement;
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
+
+    const username = usernameInput.value;
+    const password = passwordInput.value;
+
+    const user = users.find((u: User) => u.username === username && u.password === password);
+
+    if (user) {
+      setErrorMessage(null);
+      alert(`You have logged in successfully. Welcome, ${username}!`);
+
+      navigate('/dashboard');
+      onLogin(user.id <= 5 ? 'voter' : 'admin');
+    } else {
+      setErrorMessage('Invalid username or password. Please try again.');
+      alert('Invalid username or password. Please try again.');
+      return; // Prevent navigation for invalid login
+    }
+  };
+
   return (
     <div>
 <div className="relative py-3 w-96 ml-96 left-48  mt-36">
@@ -53,7 +79,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       <div className="mt-5">
         <button
           className="py-2 px-4 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
-          onClick={onLogin}
+         
+          onClick={handleLoginClick}
         >
           Log in
         </button>

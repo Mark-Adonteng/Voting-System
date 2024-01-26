@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./screens/Dashboard";
 import CategoryList from "./screens/CategoryList";
-import VotingList from "./screens/VotingList";
+import FAQ from "./screens/Faq";
 import Users from "./screens/DefaultCategoryComponent";
 import Header from "./components/Header";
 import Login from "./Login/Login";
@@ -19,18 +19,33 @@ import CategoryDetail from "./screens/CategoryDetail";
 
 const App: React.FC = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
-  const handleLogin = () => {
+
+  const handleLogin = (role: string) => {
     setLoggedIn(true);
+    setUserRole(role);
   };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    setUserRole(null);
+  };
+  // const handleLogin = (role: string) => {
+  //   setUserRole(role);
+  // };
+ 
+
 
   return (
     <Router>
       {isLoggedIn ? (
         <>
-          <Header />
+        <div>
+        <Header isLoggedIn={isLoggedIn} username={userRole || ''} onLogout={handleLogout} />
           <div className="flex h-screen bg-gray-200">
-            <Sidebar />
+          
+      <Sidebar userRole={userRole} />
             <main className="flex-grow p-8">
               <Provider store={store}>
                 <Routes>
@@ -38,15 +53,20 @@ const App: React.FC = () => {
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/category-list" element={<CategoryList />} />
                   <Route path="/category/:categoryName" element={<CategoryDetail />} />
-                  <Route path="/voting-list" element={<VotingList />} />
-                  <Route path="/users" element={<Users />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/users" />
+                  
                 </Routes>
               </Provider>
             </main>
           </div>
+         
+          </div>
         </>
       ) : (
+        
         <Login onLogin={handleLogin} />
+        
       )}
     </Router>
   );
