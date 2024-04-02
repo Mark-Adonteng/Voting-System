@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useFormData } from '../context/FormDataContext';
 
 const NewCandidateButton = () => {
-  const { formData, setFormData } = useFormData();
+  const { setFormData } = useFormData();
   const [showForm, setShowForm] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [candidateNames, setCandidateNames] = useState<string[]>(['', '', '']);
