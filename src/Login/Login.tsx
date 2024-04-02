@@ -9,7 +9,7 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [ setErrorMessage] = useState<string | null>(null);
 
   const handleLoginClick = () => {
     const usernameInput = document.getElementById('login') as HTMLInputElement;
